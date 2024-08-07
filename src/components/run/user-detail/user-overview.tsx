@@ -89,35 +89,21 @@ export const UserOverview = ({
                 if (longestVar < 35) xl = 3;
 
                 return (
-                    <div
-                        key={n}
-                        className="clearfix"
-                        style={{
-                            marginLeft:
-                                sameGame && globalData && images.length > 0
-                                    ? "117px"
-                                    : "0",
-                        }}
-                    >
-                        {!sameGame && globalData && images.length > 0 && (
-                            <div
-                                className={styles.image}
-                                style={{ cursor: "pointer" }}
-                            >
+                    <div key={n} className="clearfix">
+                        {globalData && images.length > 0 && (
+                            <div className={styles.image}>
                                 {!sameGame && (
                                     <a href={`/games/${game}`}>
                                         {globalData.image &&
-                                            globalData.image != "noimage" && (
-                                                <GameImage
-                                                    alt={globalData.display}
-                                                    src={globalData.image}
-                                                    quality="medium"
-                                                    height={132}
-                                                    width={99}
-                                                />
-                                            )}
-                                        {(!globalData.image ||
-                                            globalData.image == "noimage") && (
+                                        globalData.image != "noimage" ? (
+                                            <GameImage
+                                                alt={globalData.display}
+                                                src={globalData.image}
+                                                quality="medium"
+                                                height={132}
+                                                width={99}
+                                            />
+                                        ) : (
                                             <Image
                                                 alt="Logo"
                                                 src={
@@ -134,7 +120,9 @@ export const UserOverview = ({
                             </div>
                         )}
                         {!sameGame && (
-                            <h2>{!sameGame && <GameLink game={game} />}</h2>
+                            <h2>
+                                <GameLink game={game} />
+                            </h2>
                         )}
                         {vars.length > 0 && (
                             <small
@@ -167,11 +155,7 @@ export const UserOverview = ({
                             </small>
                         )}
                         <Table key={game} bordered hover responsive>
-                            <thead
-                                className={
-                                    sameGame ? styles.sameGameRunHeader : ""
-                                }
-                            >
+                            <thead>
                                 <tr>
                                     <th style={{ width: "40%" }}>Run</th>
                                     <th style={{ width: "13%" }}>PB</th>
@@ -203,9 +187,12 @@ export const UserOverview = ({
 
                                     return (
                                         <tr key={run.uploadTime.toString()}>
-                                            <td style={{ width: "40%" }}>
+                                            <td>
                                                 <div
-                                                    style={{ display: "flex" }}
+                                                    style={{
+                                                        display: "flex",
+                                                        gap: "0.5rem",
+                                                    }}
                                                 >
                                                     <UserGameCategoryLink
                                                         username={run.user}
@@ -221,18 +208,11 @@ export const UserOverview = ({
                                                     </UserGameCategoryLink>
 
                                                     {run.highlighted && (
-                                                        <div
-                                                            style={{
-                                                                marginLeft:
-                                                                    "0.5rem",
-                                                            }}
-                                                        >
-                                                            <StarFilledInIcon />
-                                                        </div>
+                                                        <StarFilledInIcon />
                                                     )}
                                                 </div>
                                             </td>
-                                            <td style={{ width: "13%" }}>
+                                            <td>
                                                 <DurationToFormatted
                                                     duration={
                                                         useRun.personalBest
@@ -243,22 +223,20 @@ export const UserOverview = ({
                                                             ?.personalBest &&
                                                         !forceRealTime
                                                     }
-                                                />{" "}
+                                                />
                                                 {gameTime &&
                                                     !forceRealTime &&
                                                     !!run.gameTimeData
                                                         ?.personalBest &&
-                                                    "(IGT)"}
+                                                    " (IGT)"}
                                             </td>
-                                            <td style={{ width: "13%" }}>
-                                                {run.attemptCount}
-                                            </td>
-                                            <td style={{ width: "13%" }}>
+                                            <td>{run.attemptCount}</td>
+                                            <td>
                                                 <DurationToFormatted
                                                     duration={run.totalRunTime}
                                                 />
                                             </td>
-                                            <td style={{ width: "29%" }}>
+                                            <td>
                                                 <IsoToFormatted
                                                     iso={
                                                         gameTime &&
@@ -274,17 +252,11 @@ export const UserOverview = ({
                                                 I="delete"
                                                 this={subject("run", username)}
                                             >
-                                                <td
-                                                    style={{
-                                                        display: "flex",
-                                                        justifyContent:
-                                                            "center",
-                                                    }}
-                                                >
+                                                <td>
                                                     <div
-                                                        style={{
-                                                            cursor: "pointer",
-                                                        }}
+                                                        className={
+                                                            styles.iconCell
+                                                        }
                                                         onClick={async () => {
                                                             if (
                                                                 confirm(
@@ -317,86 +289,68 @@ export const UserOverview = ({
                                                 </td>
                                                 <td>
                                                     <div
-                                                        style={{
-                                                            display: "flex",
-                                                            justifyContent:
-                                                                "center",
+                                                        className={
+                                                            styles.iconCell
+                                                        }
+                                                        onClick={() => {
+                                                            if (
+                                                                openedEdit[0] ==
+                                                                    game &&
+                                                                openedEdit[1] ==
+                                                                    run.originalRun
+                                                            ) {
+                                                                setOpenedEdit(
+                                                                    [],
+                                                                );
+                                                            } else {
+                                                                setOpenedEdit([
+                                                                    game,
+                                                                    run.originalRun,
+                                                                ]);
+                                                            }
                                                         }}
                                                     >
-                                                        <div
-                                                            style={{
-                                                                cursor: "pointer",
-                                                            }}
-                                                            onClick={() => {
-                                                                if (
-                                                                    openedEdit[0] ==
-                                                                        game &&
-                                                                    openedEdit[1] ==
-                                                                        run.originalRun
-                                                                ) {
-                                                                    setOpenedEdit(
-                                                                        [],
-                                                                    );
-                                                                } else {
-                                                                    setOpenedEdit(
-                                                                        [
-                                                                            game,
-                                                                            run.originalRun,
-                                                                        ],
-                                                                    );
-                                                                }
-                                                            }}
-                                                        >
-                                                            <EditIcon />
-                                                        </div>
+                                                        <EditIcon />
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div
-                                                        style={{
-                                                            display: "flex",
-                                                            justifyContent:
-                                                                "center",
+                                                        className={
+                                                            styles.iconCell
+                                                        }
+                                                        onClick={async () => {
+                                                            const userIdentifier = `${session.id}-${username}`;
+                                                            const editUrl =
+                                                                run.url.replace(
+                                                                    username,
+                                                                    userIdentifier,
+                                                                );
+                                                            const result =
+                                                                await fetch(
+                                                                    `/api/users/${editUrl}/highlight`,
+                                                                    {
+                                                                        method: "PUT",
+                                                                    },
+                                                                );
+
+                                                            const str =
+                                                                await result.json();
+
+                                                            runs.get(
+                                                                originalGame,
+                                                            )[
+                                                                runKey
+                                                            ].highlighted =
+                                                                str.result.highlighted;
+
+                                                            parentForceUpdate();
                                                         }}
                                                     >
-                                                        <div
-                                                            style={{
-                                                                cursor: "pointer",
-                                                            }}
-                                                            onClick={async () => {
-                                                                const userIdentifier = `${session.id}-${username}`;
-                                                                const editUrl =
-                                                                    run.url.replace(
-                                                                        username,
-                                                                        userIdentifier,
-                                                                    );
-                                                                const result =
-                                                                    await fetch(
-                                                                        `/api/users/${editUrl}/highlight`,
-                                                                        {
-                                                                            method: "PUT",
-                                                                        },
-                                                                    );
-
-                                                                const str =
-                                                                    await result.json();
-
-                                                                runs.get(
-                                                                    originalGame,
-                                                                )[
-                                                                    runKey
-                                                                ].highlighted =
-                                                                    str.result.highlighted;
-
-                                                                parentForceUpdate();
-                                                            }}
-                                                        >
-                                                            {!run.highlighted ? (
-                                                                <StarIcon />
-                                                            ) : (
-                                                                <StarFilledInIcon />
-                                                            )}
-                                                        </div>
+                                                        {!run.highlighted ? (
+                                                            <StarIcon />
+                                                        ) : (
+                                                            <StarFilledInIcon />
+                                                        )}
                                                     </div>
                                                 </td>
                                             </Can>
